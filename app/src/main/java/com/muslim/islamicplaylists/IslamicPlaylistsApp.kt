@@ -9,7 +9,7 @@ import com.muslim.islamicplaylists.composable.Greeting
 import com.muslim.islamicplaylists.ui.theme.IslamicPlaylistsTheme
 
 @Composable
-fun IslamicPlaylistApp(){
+fun IslamicPlaylistsApp(){
     IslamicPlaylistsTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize()
