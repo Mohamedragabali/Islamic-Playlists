@@ -8,7 +8,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.LayoutDirection
-import com.muslim.islamicplaylists.AppDestination
+import com.muslim.islamicplaylists.utils.AppDestination
 import com.muslim.islamicplaylists.R
 
 @Composable

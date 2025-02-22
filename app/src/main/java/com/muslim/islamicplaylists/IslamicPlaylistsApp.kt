@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import com.muslim.islamicplaylists.composable.CustomNavigationBar
 import com.muslim.islamicplaylists.composable.Greeting
 import com.muslim.islamicplaylists.ui.theme.IslamicPlaylistsTheme
+import com.muslim.islamicplaylists.utils.AppDestination
 
 @Composable
 fun IslamicPlaylistsApp(){

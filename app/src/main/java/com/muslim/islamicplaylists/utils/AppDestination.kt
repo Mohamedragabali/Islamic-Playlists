@@ -1,4 +1,4 @@
-package com.muslim.islamicplaylists
+package com.muslim.islamicplaylists.utils
 
 object AppDestination {
     const val HOME = "HomeScreen"
