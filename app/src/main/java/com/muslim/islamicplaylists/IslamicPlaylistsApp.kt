@@ -15,7 +15,7 @@ import com.muslim.islamicplaylists.ui.theme.IslamicPlaylistsTheme
 
 @Composable
 fun IslamicPlaylistsApp(){
-    var state by rememberSaveable { mutableStateOf("Home") }
+    var state by rememberSaveable { mutableStateOf(AppDestination.HOME) }
     IslamicPlaylistsTheme {
         Scaffold(
             modifier = Modifier.fillMaxSize(),

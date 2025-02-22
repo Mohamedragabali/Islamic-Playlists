@@ -8,6 +8,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.LayoutDirection
+import com.muslim.islamicplaylists.AppDestination
 import com.muslim.islamicplaylists.R
 
 @Composable
@@ -19,35 +20,35 @@ fun CustomNavigationBar(
         NavigationBar {
             CustomNavigationBarItem(
                 state =state,
-                selectedItem = "Home",
+                selectedItem = AppDestination.HOME,
                 onClick = onClick,
                 text = stringResource(R.string.home_page),
                 icon = ImageVector.vectorResource(R.drawable.home),
             )
             CustomNavigationBarItem(
                 state=state,
-                selectedItem = "newVideo" ,
+                selectedItem = AppDestination.EVERY_NEW ,
                 onClick = onClick,
                 text = stringResource(R.string.every_thing_new),
                 icon = ImageVector.vectorResource(R.drawable.video),
             )
             CustomNavigationBarItem(
                 state=state,
-                selectedItem = "favorite" ,
+                selectedItem = AppDestination.FAVORITE ,
                 onClick = onClick,
                 text = stringResource(R.string.favorite),
                 icon =ImageVector.vectorResource(R.drawable.star),
             )
             CustomNavigationBarItem(
                 state=state,
-                selectedItem = "download" ,
+                selectedItem = AppDestination.DOWNLOAD,
                 onClick = onClick,
                 text = stringResource(R.string.downloads),
                 icon = ImageVector.vectorResource(R.drawable.download),
             )
             CustomNavigationBarItem(
                 state=state,
-                selectedItem = "Settings" ,
+                selectedItem = AppDestination.SETTING ,
                 onClick = onClick,
                 text = stringResource(R.string.settings),
                 icon = ImageVector.vectorResource(R.drawable.settings),
