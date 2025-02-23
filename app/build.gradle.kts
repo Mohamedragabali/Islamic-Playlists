@@ -66,5 +66,16 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
+    //retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    //viewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    //coroutine
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 
 }
