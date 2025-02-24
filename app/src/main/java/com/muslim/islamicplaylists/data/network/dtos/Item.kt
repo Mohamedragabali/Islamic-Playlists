@@ -3,11 +3,9 @@ package com.muslim.islamicplaylists.data.network.dtos
 
 import com.google.gson.annotations.SerializedName
 
-data class Data(
+data class Item(
     @SerializedName("category")
     val category: String = "",
-    @SerializedName("subCategory")
-    val subCategory: String = "",
     @SerializedName("title")
     val title: String = "",
     @SerializedName("url")
