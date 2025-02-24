@@ -3,7 +3,6 @@ package com.muslim.islamicplaylists.screens.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.muslim.islamicplaylists.domain.model.Playlist
 import com.muslim.islamicplaylists.domain.model.Sections
 import com.muslim.islamicplaylists.domain.usecase.GetAllVideosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
