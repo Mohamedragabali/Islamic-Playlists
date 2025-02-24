@@ -1,8 +1,10 @@
 package com.muslim.islamicplaylists.screens.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.muslim.islamicplaylists.domain.model.Playlist
+import com.muslim.islamicplaylists.domain.model.Sections
 import com.muslim.islamicplaylists.domain.usecase.GetAllVideosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +17,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getAllVideosUseCase: GetAllVideosUseCase
 ): ViewModel() {
-    private val _state = MutableStateFlow("")
+    private val _state = MutableStateFlow(emptyList<Sections>())
     val state = _state.asStateFlow()
     init {
         getAllVideos()
@@ -24,14 +26,12 @@ class HomeViewModel @Inject constructor(
     private fun getAllVideos() {
         viewModelScope.launch {
             try{
-                val result : List<Playlist> =  getAllVideosUseCase()
+                val result : List<Sections> =  getAllVideosUseCase()
                 _state.update {
-                    result.toString()
+                    result
                 }
             }catch (e:Exception){
-                _state.update {
-                    "${e.message}"
-                }
+                Log.i("MY_TAG",e.message.toString())
             }
 
         }
