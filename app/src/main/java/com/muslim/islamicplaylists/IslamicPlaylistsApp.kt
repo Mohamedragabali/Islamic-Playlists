@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import com.muslim.islamicplaylists.composable.CustomNavigationBar
@@ -33,10 +36,12 @@ fun IslamicPlaylistsApp(){
                 }
             }
         ) { innerPadding ->
-            IslamicPlaylistsNavGraph(
-                navController = navController,
-                modifier = Modifier.padding(innerPadding)
-            )
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl){
+                IslamicPlaylistsNavGraph(
+                    navController = navController,
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
         }
     }
 }
