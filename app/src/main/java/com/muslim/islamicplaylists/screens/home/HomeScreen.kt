@@ -1,5 +1,6 @@
 package com.muslim.islamicplaylists.screens.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,8 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
-import com.muslim.islamicplaylists.domain.model.Playlist
 import com.muslim.islamicplaylists.domain.model.Sections
+import com.muslim.islamicplaylists.screens.detials.navigateToVideoDetailScreen
 
 @Composable
 fun HomeScreen(
@@ -40,18 +41,31 @@ fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier
 ){
-
     val state by viewModel.state.collectAsState()
     HomeScreenContent(
         state,
-        modifier = modifier
+        modifier = modifier,
+        onClickItem = {sectionName, playlistName,  videoId , videoTitle ->
+            navController.navigateToVideoDetailScreen(
+                sectionName=sectionName,
+                playlistName = playlistName,
+                videoId = videoId,
+                videoTitle = videoTitle
+            )
+        }
+
     )
 }
-
 @Composable
 private fun HomeScreenContent(
     state:List<Sections> ,
-    modifier: Modifier
+    modifier: Modifier,
+    onClickItem:(
+        sectionName:String,
+        playlistName:String ,
+        videoId:String ,
+        videoTitle : String,
+    )->Unit
 ){
 
     LazyColumn(
@@ -66,13 +80,12 @@ private fun HomeScreenContent(
                         Text(
                             text = "اهلا بك مجدد "
                         )
-                        Text(
-                            text = "محمد علي"
-                        )
                     }
                     Spacer(Modifier.weight(1f))
                     Icon(
-                        modifier = Modifier.padding(6.dp).size(28.dp),
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .size(28.dp),
                         imageVector = Icons.Default.Search,
                         contentDescription = null
                     )
@@ -87,16 +100,30 @@ private fun HomeScreenContent(
                         .fillMaxWidth()
                         .padding(
                             top = 52.dp,
-                            bottom = 0.dp,
-                            start = 0.dp,
-                            end =0.dp ,
                         ),
                     contentAlignment = Alignment.Center
                 ){
                     SubcomposeAsyncImage(
                         modifier = Modifier
+                            .clickable {
+                                onClickItem(
+                                    "الاستعداد لرمضان",
+                                    "شهر رمضان | د. أحمد عبد المنعم",
+                                    "SL2CdQ1cqKE" ,
+                                    "الاستغلال الأمثل لمواسم الطاعات | د. أحمد عبد المنعم",
+                                )
+                            }
                             .fillMaxWidth()
+                            .height(200.dp)
                         ,
+                        loading = {
+                            Box(
+                                modifier = Modifier,
+                                contentAlignment = Alignment.Center
+                            ){
+                                CircularProgressIndicator()
+                            }
+                        },
                         model = "https://i.ytimg.com/vi/SL2CdQ1cqKE/maxresdefault.jpg",
                         contentDescription = null,
                         alignment = Alignment.Center
@@ -105,55 +132,69 @@ private fun HomeScreenContent(
 
             }
         }
-        state.forEach { section ->
-            item {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(
-                        top = 4.dp ,  bottom = 2.dp , start = 16.dp , end = 16.dp
+        items(state) { section ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 4.dp, bottom = 2.dp, start = 16.dp, end = 16.dp
                     ),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text =section.name ,
-                        modifier = Modifier,
-                    )
-                    Text(
-                        text ="المزيد" ,
-                        modifier = Modifier,
-                    )
-                }
-
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = section.name,
+                    modifier = Modifier,
+                )
+                Text(
+                    text = "المزيد",
+                    modifier = Modifier,
+                )
             }
-            item{
-                LazyRow (
-                    modifier = Modifier.fillMaxWidth().height(180.dp)//.size(width = 180.dp, height = 200.dp),
-                   , contentPadding = PaddingValues(8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ){
-                    items(section.playlists){
-                        Column(
-                            modifier=Modifier
-                        ) {
-                            SubcomposeAsyncImage(
-                                modifier = Modifier.size(width = 140.dp, height = 140.dp),
-                                alignment = Alignment.Center,
-                                model = it.url,
-                                loading = { CircularProgressIndicator(
-                                    modifier = Modifier.size(64.dp))
-                                    },
-                                error = {},
-                                contentDescription = null ,
-                                contentScale = ContentScale.Crop
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)//.size(width = 180.dp, height = 200.dp),
+                , contentPadding = PaddingValues(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(section.playlists) { playlist ->
+                    Column(
+                        modifier = Modifier.clickable {
+                            onClickItem(
+                                section.name,
+                                playlist.name,
+                                playlist.videos.first().videoId,
+                                playlist.videos.first().title
                             )
-                            Text(
-                                modifier = Modifier.size(width = 140.dp, height = 160.dp),
-                                text = it.name,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
+                        },
+                    ) {
+                        SubcomposeAsyncImage(
+                            modifier = Modifier
+                                .size(width = 140.dp, height = 140.dp),
+                            alignment = Alignment.Center,
+                            model = playlist.url,
+                            loading = {
+                                Box(
+                                    modifier = Modifier,
+                                    contentAlignment = Alignment.Center
+                                ){
+                                    CircularProgressIndicator()
+                                }
 
+                            },
+                            error = {},
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop
+                        )
+                        Text(
+                            modifier = Modifier
+                                .size(width = 140.dp, height = 160.dp),
+                            text = playlist.name,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
+
                 }
             }
         }

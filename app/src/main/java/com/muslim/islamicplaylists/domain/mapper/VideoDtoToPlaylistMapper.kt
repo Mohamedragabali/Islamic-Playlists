@@ -35,7 +35,7 @@ class VideoDtoToPlaylistMapper:Mapper<PlaylistDto,List<Sections>> {
 
     private fun getThumbnailFromUrl(url: String):String{
         val id = getIdFromUrl(url)
-        return "https://i.ytimg.com/vi/$id/maxresdefault.jpg"
+        return "https://img.youtube.com/vi/$id/3.jpg"
     }
     private fun getIdFromUrl(url: String): String {
         return url.substring(url.indexOf('=')+1,url.indexOf('&'))

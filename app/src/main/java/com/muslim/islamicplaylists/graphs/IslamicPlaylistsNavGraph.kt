@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.muslim.islamicplaylists.screens.detials.videoDetailsScreenRoute
 import com.muslim.islamicplaylists.screens.download.downloadScreenRout
 import com.muslim.islamicplaylists.screens.everynew.everyNewScreenRoute
 import com.muslim.islamicplaylists.screens.favorite.favoriteScreenRoute
@@ -39,6 +40,10 @@ fun IslamicPlaylistsNavGraph(
         settingScreenRoute(
             navController=navController,
             modifier=modifier
+        )
+        videoDetailsScreenRoute(
+           navController= navController,
+            modifier = modifier
         )
     }
 }
