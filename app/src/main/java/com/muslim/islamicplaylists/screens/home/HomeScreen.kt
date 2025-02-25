@@ -117,7 +117,12 @@ private fun HomeScreenContent(
                             .height(200.dp)
                         ,
                         loading = {
-
+                            Box(
+                                modifier = Modifier,
+                                contentAlignment = Alignment.Center
+                            ){
+                                CircularProgressIndicator()
+                            }
                         },
                         model = "https://i.ytimg.com/vi/SL2CdQ1cqKE/maxresdefault.jpg",
                         contentDescription = null,
