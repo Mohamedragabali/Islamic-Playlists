@@ -2,6 +2,7 @@ package com.muslim.islamicplaylists.screens.detials
 
 import com.muslim.islamicplaylists.domain.model.Video
 
+// todo please make Ui state as sealead class with different states like loading,error, data
 data class VideoDetailsUIState(
     val videoId :String = "",
     val videoTitle:String="",
