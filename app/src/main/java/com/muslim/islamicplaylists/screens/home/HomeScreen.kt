@@ -27,11 +27,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
+import com.muslim.islamicplaylists.R
 import com.muslim.islamicplaylists.domain.model.Sections
 import com.muslim.islamicplaylists.screens.detials.navigateToVideoDetailScreen
 
@@ -78,8 +80,7 @@ private fun HomeScreenContent(
                 ){
                     Column {
                         Text(
-                            // todo use text from resources
-                            text = "اهلا بك مجدد "
+                            text = stringResource(R.string.hallo_again)
                         )
                     }
                     Spacer(Modifier.weight(1f))
@@ -110,7 +111,7 @@ private fun HomeScreenContent(
                                 onClickItem(
                                     "الاستعداد لرمضان",
                                     "شهر رمضان | د. أحمد عبد المنعم",
-                                    "SL2CdQ1cqKE" ,
+                                    "SL2CdQ1cqKE",
                                     "الاستغلال الأمثل لمواسم الطاعات | د. أحمد عبد المنعم",
                                 )
                             }
