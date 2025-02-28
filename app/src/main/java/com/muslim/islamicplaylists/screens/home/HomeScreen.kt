@@ -78,6 +78,7 @@ private fun HomeScreenContent(
                 ){
                     Column {
                         Text(
+                            // todo use text from resources
                             text = "اهلا بك مجدد "
                         )
                     }

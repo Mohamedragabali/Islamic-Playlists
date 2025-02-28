@@ -60,6 +60,7 @@ class VideoDetailsScreenViewModel @Inject constructor(
             }catch (e:Exception){
                 _state.update {
                     it.copy(
+                        // todo why reset data here, this will lose data if i need to do retry again
                         videoId = "",
                         playlistName = "",
                         videos = emptyList(),
