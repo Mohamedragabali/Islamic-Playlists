@@ -34,7 +34,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import com.muslim.islamicplaylists.R
-import com.muslim.islamicplaylists.domain.model.Sections
 import com.muslim.islamicplaylists.screens.detials.navigateToVideoDetailScreen
 
 @Composable
@@ -60,7 +59,7 @@ fun HomeScreen(
 }
 @Composable
 private fun HomeScreenContent(
-    state:List<Sections> ,
+    state:HomeUIState ,
     modifier: Modifier,
     onClickItem:(
         sectionName:String,
@@ -69,7 +68,49 @@ private fun HomeScreenContent(
         videoTitle : String,
     )->Unit
 ){
+    when(state){
+        is HomeUIState.Data -> DataContent(
+            state,
+            modifier,
+            onClickItem
+        )
+        is HomeUIState.Error -> ErrorContent()
+        HomeUIState.Loading -> LoadingContent()
+    }
+}
 
+@Composable
+private fun LoadingContent(){
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+private fun ErrorContent(){
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+
+    ) {
+        Text("please check your internet")
+    }
+}
+
+@Composable
+private fun DataContent(
+    state:HomeUIState.Data ,
+    modifier: Modifier,
+    onClickItem:(
+        sectionName:String,
+        playlistName:String ,
+        videoId:String ,
+        videoTitle : String,
+    )->Unit
+){
     LazyColumn(
         modifier = modifier.fillMaxSize(),
     ) {
@@ -109,10 +150,10 @@ private fun HomeScreenContent(
                         modifier = Modifier
                             .clickable {
                                 onClickItem(
-                                    "الاستعداد لرمضان",
-                                    "شهر رمضان | د. أحمد عبد المنعم",
-                                    "SL2CdQ1cqKE",
-                                    "الاستغلال الأمثل لمواسم الطاعات | د. أحمد عبد المنعم",
+                                    state.sectionName,
+                                    state.playlistName,
+                                    state.videoId,
+                                    state.videoTitle,
                                 )
                             }
                             .fillMaxWidth()
@@ -126,7 +167,7 @@ private fun HomeScreenContent(
                                 CircularProgressIndicator()
                             }
                         },
-                        model = "https://i.ytimg.com/vi/SL2CdQ1cqKE/maxresdefault.jpg",
+                        model = state.videoThumbnail,
                         contentDescription = null,
                         alignment = Alignment.Center
                     )
@@ -134,7 +175,7 @@ private fun HomeScreenContent(
 
             }
         }
-        items(state) { section ->
+        items(state.sections) { section ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

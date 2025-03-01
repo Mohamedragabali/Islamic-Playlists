@@ -16,7 +16,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getAllVideosUseCase: GetAllVideosUseCase
 ): ViewModel() {
-    private val _state = MutableStateFlow(emptyList<Sections>())
+    private val _state:MutableStateFlow<HomeUIState> = MutableStateFlow(HomeUIState.Loading)
     val state = _state.asStateFlow()
     init {
         getAllVideos()
@@ -25,9 +25,38 @@ class HomeViewModel @Inject constructor(
     private fun getAllVideos() {
         viewModelScope.launch {
             try{
-                val result : List<Sections> =  getAllVideosUseCase()
+                val result : List<SectionsUIState> =
+                    getAllVideosUseCase().map { section->
+                        SectionsUIState(
+                            name = section.name,
+                            playlists = section.playlists.map {playlist ->
+                                PlaylistUIState(
+                                    name = playlist.name,
+                                    url = playlist.url,
+                                    videos =playlist.videos.map { video->
+                                        VideoUIState(
+                                            videoId = video.videoId,
+                                         title = video.title,
+                                         url = video.url,
+                                         thumbnail = video.thumbnail,
+                                         playlistName = video.playlistName,
+                                         sectionName = video.sectionName
+                                        )
+                                    }
+                                )
+                            }
+                        )
+                    }
                 _state.update {
-                    result
+                    HomeUIState.Data(
+                         userName= "محمد رجب",
+                        "الاستعداد لرمضان",
+                        "شهر رمضان | د. أحمد عبد المنعم",
+                        "SL2CdQ1cqKE",
+                        "الاستغلال الأمثل لمواسم الطاعات | د. أحمد عبد المنعم",
+                        "https://i.ytimg.com/vi/SL2CdQ1cqKE/maxresdefault.jpg",
+                     sections= result,
+                    )
                 }
             }catch (e:Exception){
                 Log.i("MY_TAG",e.message.toString())
