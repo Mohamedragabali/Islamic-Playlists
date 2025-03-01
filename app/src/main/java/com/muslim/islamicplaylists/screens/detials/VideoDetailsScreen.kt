@@ -57,131 +57,144 @@ private fun VideoDetailScreenContent(
     Column(
         modifier = modifier
     ) {
-        if (state.isLoading) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+        when(state){
+            is VideoDetailsUIState.Data -> DataContent(state, onClickItem)
+            is VideoDetailsUIState.Error -> ErrorContent()
+            VideoDetailsUIState.Loading -> LoadingContent()
+        }
+    }
+}
 
-        } else if (state.isError) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+@Composable
+private fun LoadingContent(){
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
 
-            ) {
-                Text("please check your internet")
-            }
-        } else {
-            AndroidView(
-                factory = {
-                    val youTubePlayerView = YouTubePlayerView(it).apply {
-                        enableAutomaticInitialization = false
-                        addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                            override fun onReady(youTubePlayer: YouTubePlayer) {
-                                youTubePlayer.cueVideo(state.videoId, 0f)
-                            }
-                        }
-                        )
+@Composable
+private fun ErrorContent(){
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+
+    ) {
+        Text("please check your internet")
+    }
+}
+
+@Composable
+private fun DataContent(
+    state : VideoDetailsUIState.Data,
+    onClickItem: (videoId: String, videoTitle: String) -> Unit
+){
+    AndroidView(
+        factory = {
+            val youTubePlayerView = YouTubePlayerView(it).apply {
+                enableAutomaticInitialization = false
+                addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        youTubePlayer.cueVideo(state.videoId, 0f)
                     }
-                    youTubePlayerView
-
-                }, update = { youtubePlayer ->
-                    youtubePlayer.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
-                        override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
-                            youTubePlayer.cueVideo(state.videoId, 0f)
-                        }
-
-                    })
                 }
-            )
-            Row(
-                modifier = Modifier,
-               verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(
-                            start = 16.dp,
-                            top = 16.dp,
-                            bottom = 16.dp
-                        )
-                ){
-                    Column {
-                        Text(
-                            text = state.videoTitle
-                        )
-                        Text(
-                            text = state.playlistName,
-
-                        )
-                    }
-
-                }
-                Icon(
-                    modifier = Modifier.padding(
-                        start =2.dp ,
-                        end = 16.dp,
-                        top = 16.dp,
-                        bottom = 16.dp
-                    ),
-                    imageVector = Icons.Default.Star,
-                    contentDescription = null
                 )
             }
-            Text(
-                modifier = Modifier.padding(
-                    top = 2.dp,
-                    bottom = 1.dp,
-                    start = 16.dp,
-                    end = 16.dp ),
-                text = "المزيد من الفديوهات",
-                textDecoration = TextDecoration.Underline
-            )
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(state.videos) {
-                    Row (
-                       verticalAlignment = Alignment.CenterVertically,
-                    ){
-                        SubcomposeAsyncImage(
-                            modifier = Modifier
-                                .clickable { onClickItem(it.videoId, it.title) }
-                                .width(160.dp)
-                                .height(120.dp)
-                                .padding(
-                                    end = 6.dp
-                                ),
-                            loading = {
-                                Box(
-                                    contentAlignment = Alignment.Center
-                                ){
-                                    CircularProgressIndicator()
+            youTubePlayerView
 
-                                }
-                            },
-                            model = it.thumbnail,
-                            contentDescription = null,
-                            error = {
-                                Text(
-                                    text = state.errorMessage
-                                )
-                            }
-                        )
-                        Text(
-                            text = it.title,
-                        )
+        }, update = { youtubePlayer ->
+            youtubePlayer.getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
+                override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
+                    youTubePlayer.cueVideo(state.videoId, 0f)
+                }
+
+            })
+        }
+    )
+    Row(
+        modifier = Modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(
+                    start = 16.dp,
+                    top = 16.dp,
+                    bottom = 16.dp
+                )
+        ){
+            Column {
+                Text(
+                    text = state.videoTitle
+                )
+                Text(
+                    text = state.playlistName,
+
+                    )
+            }
+
+        }
+        Icon(
+            modifier = Modifier.padding(
+                start =2.dp ,
+                end = 16.dp,
+                top = 16.dp,
+                bottom = 16.dp
+            ),
+            imageVector = Icons.Default.Star,
+            contentDescription = null
+        )
+    }
+    Text(
+        modifier = Modifier.padding(
+            top = 2.dp,
+            bottom = 1.dp,
+            start = 16.dp,
+            end = 16.dp ),
+        text = "المزيد من الفديوهات",
+        textDecoration = TextDecoration.Underline
+    )
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(state.videos) {
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+            ){
+                SubcomposeAsyncImage(
+                    modifier = Modifier
+                        .clickable { onClickItem(it.videoId, it.title) }
+                        .width(160.dp)
+                        .height(120.dp)
+                        .padding(
+                            end = 6.dp
+                        ),
+                    loading = {
+                        Box(
+                            contentAlignment = Alignment.Center
+                        ){
+                            CircularProgressIndicator()
+
+                        }
+                    },
+                    model = it.thumbnail,
+                    contentDescription = null,
+                    error = {
 
                     }
+                )
+                Text(
+                    text = it.title,
+                )
 
-                }
             }
-        }
 
+        }
     }
+
 }
