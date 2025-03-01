@@ -6,12 +6,11 @@ import com.muslim.islamicplaylists.data.repository.VideosRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dagger.hilt.android.components.ViewModelComponent
 import javax.inject.Singleton
 
-// todo i think repo should not be Singleton 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 object RepositoryModule {
 
     @Singleton
