@@ -2,6 +2,7 @@ package com.muslim.islamicplaylists.di
 
 import com.muslim.islamicplaylists.data.network.apiservice.VideosApiService
 import com.muslim.islamicplaylists.data.repository.VideosRepository
+import com.muslim.islamicplaylists.data.repository.VideosRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,6 +19,6 @@ object RepositoryModule {
     fun provideVideosRepository(
         apiService: VideosApiService
     ):VideosRepository{
-        return VideosRepository( apiService)
+        return VideosRepositoryImpl( apiService)
     }
 }
