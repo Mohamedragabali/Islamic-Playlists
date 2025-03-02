@@ -1,5 +1,6 @@
 package com.muslim.islamicplaylists.screens.detials
 
+import android.provider.MediaStore
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,9 +17,10 @@ import javax.inject.Inject
 class VideoDetailsScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getPlaylistVideos: GetPlaylistVideosUseCase
-): ViewModel() {
+) : ViewModel() {
 
-    private val _state:MutableStateFlow<VideoDetailsUIState> = MutableStateFlow(VideoDetailsUIState())
+    private val _state: MutableStateFlow<VideoDetailsUIState> =
+        MutableStateFlow(VideoDetailsUIState.Loading)
     val state = _state.asStateFlow()
 
     private val args = VideoDetailsScreenArgs(savedStateHandle)
@@ -27,46 +29,48 @@ class VideoDetailsScreenViewModel @Inject constructor(
     init {
         getVideoId()
     }
-    fun onClickItem(videoId:String , videoTitle : String ){
-        _state.update {
-            it.copy(
-                videoId = videoId ,
-                videoTitle = videoTitle
-            )
+
+    fun onClickItem(videoId: String, videoTitle: String) {
+        _state.update { currentState ->
+            when (currentState) {
+                is VideoDetailsUIState.Data -> currentState.copy(
+                    videoId = videoId,
+                    videoTitle = videoTitle
+                )
+
+                else -> currentState
+            }
         }
     }
+
     private fun getVideoId() {
         viewModelScope.launch {
-            try{
+            try {
+                val result: List<VideoUIState> = getPlaylistVideos(
+                    sectionName = args.sectionName,
+                    playlistName = args.playListName,
+                ).map {
+                    VideoUIState(
+                        videoId =it.videoId,
+                        title =it.title,
+                        url =it.url,
+                        thumbnail =it.thumbnail,
+                        playlistName = it.playlistName,
+                        sectionName = it.sectionName
+                    )
+                }
                 _state.update {
-                    it.copy(
+                    VideoDetailsUIState.Data(
                         videoId = args.videoId,
                         videoTitle = args.videoTitle,
                         playlistName = args.playListName,
-                        isLoading = true
-                    )
-                }
-                val result : List<Video> =  getPlaylistVideos(
-                    sectionName = args.sectionName,
-                    playlistName = args.playListName,
-                )
-
-                _state.update {
-                    it.copy(
                         videos = result,
-                        isLoading = false
                     )
                 }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 _state.update {
-                    it.copy(
-                        // todo why reset data here, this will lose data if i need to do retry again
-                        videoId = "",
-                        playlistName = "",
-                        videos = emptyList(),
-                        isLoading = false,
-                        isError = true,
-                        errorMessage = e.message.toString()
+                    VideoDetailsUIState.Error(
+                        e.message.toString()
                     )
                 }
             }

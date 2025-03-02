@@ -1,15 +1,24 @@
 package com.muslim.islamicplaylists.screens.detials
 
-import com.muslim.islamicplaylists.domain.model.Video
+sealed class VideoDetailsUIState() {
+    data class Data(
+        val videoId: String = "",
+        val videoTitle: String = "",
+        val playlistName: String = "",
+        val videos: List<VideoUIState> = emptyList(),
+    ) :VideoDetailsUIState()
 
-// todo please make Ui state as sealead class with different states like loading,error, data
-data class VideoDetailsUIState(
-    val videoId :String = "",
-    val videoTitle:String="",
-    val playlistName : String ="",
-    val videos: List<Video> = emptyList(),
-    val isLoading : Boolean = false ,
-    val isError: Boolean = false,
-    val errorMessage:  String = ""
+    data class Error(
+        val message:String
+    ):VideoDetailsUIState()
+    data object Loading :VideoDetailsUIState()
+}
+
+data class VideoUIState(
+    val videoId :String = "" ,
+    val title : String = "",
+    val url :String ="",
+    val thumbnail:String ="",
+    val playlistName: String = "",
+    val sectionName:String = ""
 )
-

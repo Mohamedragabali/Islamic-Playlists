@@ -1,23 +1,21 @@
 package com.muslim.islamicplaylists.di
 
-import com.muslim.islamicplaylists.data.network.apiservice.VideosApiService
+import com.muslim.islamicplaylists.data.datasource.VideosDataSource
 import com.muslim.islamicplaylists.data.repository.VideosRepository
+import com.muslim.islamicplaylists.data.repository.VideosRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dagger.hilt.android.components.ViewModelComponent
 
-// todo i think repo should not be Singleton 
 @Module
-@InstallIn(SingletonComponent::class)
+@InstallIn(ViewModelComponent::class)
 object RepositoryModule {
 
-    @Singleton
     @Provides
     fun provideVideosRepository(
-        apiService: VideosApiService
+        dataSource: VideosDataSource
     ):VideosRepository{
-        return VideosRepository( apiService)
+        return VideosRepositoryImpl( dataSource)
     }
 }
